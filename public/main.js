@@ -1,7 +1,25 @@
-const main = () => {
-  if (document.querySelector('h1.hello-world')) {
-    document.querySelector('h1.hello-world').textContent = 'Hello, World!'
-  }
-}
+const qs = e => document.querySelector(e);
 
-document.addEventListener('DOMContentLoaded', main)
+let jokeData;
+
+const getJoke = async () => {
+  console.log("going out to api");
+  qs(".punchline").textContent = "";
+  const resp = await fetch("https://official-joke-api.appspot.com/random_joke");
+  console.log("back from api");
+  console.log(resp);
+  jokeData = await resp.json();
+  console.log(jokeData);
+  displayData(jokeData);
+};
+
+const displayData = jokeData => {
+  qs(".setup").textContent = jokeData.setup;
+};
+
+const revealPunchline = () => {
+  qs(".punchline").textContent = jokeData.punchline;
+};
+
+qs(".tellMeAJoke").addEventListener("click", getJoke);
+qs(".revealPunchline").addEventListener("click", revealPunchline);
